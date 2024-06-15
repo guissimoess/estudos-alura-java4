@@ -21,27 +21,30 @@ public class PrincipalComBusca {
         String titulo = sc.nextLine();
         String endereco = "https://www.omdbapi.com/?t=" + titulo + "&apikey=adbe8a43";
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(endereco))
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        String json = response.body();
-        System.out.println(json);
-
-        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
-        TituloOmdb meutituloOmdb = gson.fromJson(json, TituloOmdb.class);
-        System.out.println(meutituloOmdb);
-
         try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(endereco))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            String json = response.body();
+            System.out.println(json);
+
+            Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+            TituloOmdb meutituloOmdb = gson.fromJson(json, TituloOmdb.class);
+            System.out.println(meutituloOmdb);
+
+
             Titulo meutitulo = new Titulo(meutituloOmdb);
             System.out.println("Titulo convertido");
             System.out.println(meutitulo);
         } catch (NumberFormatException e) {
             System.out.println("Erro ao converter o título");
             System.out.println(e.getMessage());
-
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro ao buscar o título");
+            System.out.println(e.getMessage());
         } finally {
             System.out.println("Fim do programa");
         }
