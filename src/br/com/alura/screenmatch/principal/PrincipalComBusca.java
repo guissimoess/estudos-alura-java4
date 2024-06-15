@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.principal;
 
+import br.com.alura.screenmatch.exceptions.ErroDeConversaoDeAnoException;
 import br.com.alura.screenmatch.modelos.Titulo;
 import br.com.alura.screenmatch.modelos.TituloOmdb;
 import com.google.gson.FieldNamingPolicy;
@@ -19,7 +20,7 @@ public class PrincipalComBusca {
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o título que você deseja buscar: ");
         String titulo = sc.nextLine();
-        String endereco = "https://www.omdbapi.com/?t=" + titulo + "&apikey=adbe8a43";
+        String endereco = "https://www.omdbapi.com/?t=" + titulo.replace(" ", "+") + "&apikey=adbe8a43";
 
         try {
             HttpClient client = HttpClient.newHttpClient();
@@ -42,8 +43,7 @@ public class PrincipalComBusca {
         } catch (NumberFormatException e) {
             System.out.println("Erro ao converter o título");
             System.out.println(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Erro ao buscar o título");
+        } catch (ErroDeConversaoDeAnoException e) {
             System.out.println(e.getMessage());
         } finally {
             System.out.println("Fim do programa");
