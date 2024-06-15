@@ -19,13 +19,13 @@ public class PrincipalComBusca {
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o título que você deseja buscar: ");
         String titulo = sc.nextLine();
-        String endereco = "https://www.omdbapi.com/?t=" + titulo  + "&apikey=adbe8a43";
+        String endereco = "https://www.omdbapi.com/?t=" + titulo + "&apikey=adbe8a43";
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(endereco))
                 .build();
-        HttpResponse <String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         String json = response.body();
         System.out.println(json);
@@ -34,10 +34,17 @@ public class PrincipalComBusca {
         TituloOmdb meutituloOmdb = gson.fromJson(json, TituloOmdb.class);
         System.out.println(meutituloOmdb);
 
-        Titulo meutitulo = new Titulo(meutituloOmdb);
-        System.out.println("Titulo convertido");
-        System.out.println(meutitulo);
+        try {
+            Titulo meutitulo = new Titulo(meutituloOmdb);
+            System.out.println("Titulo convertido");
+            System.out.println(meutitulo);
+        } catch (NumberFormatException e) {
+            System.out.println("Erro ao converter o título");
+            System.out.println(e.getMessage());
 
+        } finally {
+            System.out.println("Fim do programa");
+        }
     }
 
 }
